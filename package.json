@@ -1,0 +1,16 @@
+{
+	"name": "com.guntrumm.unityeditoriconscraper",
+	"displayName": "Unity Editor Icon Scraper",
+	"description": "Small tool to retrieve all internal unity editor icons for editor scripting purposes. Inspired by: https://github.com/halak/unity-editor-icons",
+	"version": "0.0.2",
+	"unity": "6000.0",
+	"license": "MIT",
+	"documentationUrl": "https://github.com/Doppelkeks/UnityEditorIconScraper/blob/main/README.md",
+  	"changelogUrl": "https://github.com/Doppelkeks/UnityEditorIconScraper/blob/main/CHANGELOG.md",
+  	"licensesUrl": "https://github.com/Doppelkeks/UnityEditorIconScraper/blob/main/LICENSE.md",
+	"author": {
+		"name": "Matthias Guntrum",
+		"url": "https://github.com/Doppelkeks",
+		"email": "guntrumm@gmail.com"
+	},
+}

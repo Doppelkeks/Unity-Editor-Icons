@@ -1,0 +1,1 @@
+| ![]({escapedPath}) | `{iconName}` | `{fileID}` |
