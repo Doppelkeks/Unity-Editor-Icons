@@ -5,9 +5,9 @@
 	"version": "0.0.2",
 	"unity": "6000.0",
 	"license": "MIT",
-	"documentationUrl": "https://github.com/Doppelkeks/UnityEditorIconScraper/blob/main/README.md",
-  	"changelogUrl": "https://github.com/Doppelkeks/UnityEditorIconScraper/blob/main/CHANGELOG.md",
-  	"licensesUrl": "https://github.com/Doppelkeks/UnityEditorIconScraper/blob/main/LICENSE.md",
+	"documentationUrl": "https://github.com/Doppelkeks/Unity-Editor-Icons/blob/main/README.md",
+  	"changelogUrl": "https://github.com/Doppelkeks/Unity-Editor-Icons/blob/main/CHANGELOG.md",
+  	"licensesUrl": "https://github.com/Doppelkeks/Unity-Editor-Icons/blob/main/LICENSE.md",
 	"author": {
 		"name": "Matthias Guntrum",
 		"url": "https://github.com/Doppelkeks",
