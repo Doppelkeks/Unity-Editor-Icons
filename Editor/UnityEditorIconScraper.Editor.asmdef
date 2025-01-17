@@ -1,5 +1,5 @@
 {
-    "name": "EditorIconScraper.Editor",
+    "name": "UnityEditorIconScraper.Editor",
     "rootNamespace": "",
     "references": [],
     "includePlatforms": [

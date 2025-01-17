@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UnityEditorIconScraper {
     /// <summary>
-    /// Get file ids by using hidden Unsupported.GetFileIDHint(Object).
+    /// This class gives us access to serveral hidden unity methods that are not publicly documented or accessible
     /// </summary>
     public static class ReflectionMethods {
         private static MethodInfo _getFileIDHintMethod;
