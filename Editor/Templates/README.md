@@ -1,6 +1,7 @@
 Unity Editor Built-in Icons
 ==============================
 Unity version: **{unityVersion}**
+
 Icons that can be loaded via `EditorGUIUtility.IconContent`
 
 Example: `EditorGUIUtility.IconContent("console.infoicon");`

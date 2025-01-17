@@ -12,7 +12,7 @@ namespace UnityEditorIconScraper {
         /// The display path in the Project Settings window.
         /// </summary>
         public const string WINDOW_PATH = "Tools/" + nameof(UnityEditorIconScraper);
-        
+         
         /// <summary>
         /// Maximum pixel width of small icons for the readme generation.
         /// </summary>
