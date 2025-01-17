@@ -12,6 +12,12 @@ namespace UnityEditorIconScraper {
         /// The display path in the Project Settings window.
         /// </summary>
         public const string WINDOW_PATH = "Tools/" + nameof(UnityEditorIconScraper);
+        
+        /// <summary>
+        /// Maximum pixel width of small icons for the readme generation.
+        /// </summary>
+        [Header("General"), Tooltip("Maximum pixel width of small icons for the readme generation.")]
+        public int maxWidthForReadmeIcons = 128;
 
         /// <summary>
         /// The folder path where exported (original/full-size) icons will be written.
@@ -36,7 +42,7 @@ namespace UnityEditorIconScraper {
         /// </summary>
         [Header("PNGQuant (compress icons)"), Tooltip("Command-line arguments for pngquant (e.g., --force, --quality=10-60, etc.).")]
         public string pngquantArguments = "--force 128 --quality=10-60 --ext .png *.png *\\*.png *\\*\\*.png *\\*\\*\\*.png *\\*\\*\\*\\*.png";
-
+         
         /// <summary>
         /// Absolute or relative path to pngquant.exe.
         /// If it's on your PATH, "pngquant.exe" might suffice.

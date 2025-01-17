@@ -66,7 +66,7 @@ namespace UnityEditorIconScraper {
 
 			try {
 				// 1. Get all relevant icons on main thread.
-				List<IconFileData> iconFiles = CreateIconData(Settings.instance.originalIconsOutputPath);
+				List<IconFileData> iconFiles = CreateIconData(Settings.instance.originalIconsOutputPath, false);
 
 				// 2. Perform parallel writes on a background thread
 				EditorUtility.DisplayProgressBar(EXPORT_ICONS_MESSAGE, "Writing files...", 1.0f);
@@ -238,7 +238,7 @@ namespace UnityEditorIconScraper {
 		/// Create all the relevant icon data
 		/// </summary>
 		/// <returns></returns>
-		private static List<IconFileData> CreateIconData(string outputPath) {
+		private static List<IconFileData> CreateIconData(string outputPath, bool resize=true) {
 			AssetBundle editorAssetBundle = ReflectionMethods.GetEditorAssetBundle();
 			string iconsPath = GetIconsPath();
 			string[] assetNames = EnumerateIcons(editorAssetBundle, iconsPath).ToArray();
@@ -264,7 +264,13 @@ namespace UnityEditorIconScraper {
 
 				// Decompress on main thread
 				Texture2D finalTexture = DeCompress(readableTexture);
-				byte[] bytes = finalTexture.EncodeToPNG();
+
+                // resize to max width
+                if (resize) {
+                    finalTexture = ResizeToMaxWidth(finalTexture, Settings.instance.maxWidthForReadmeIcons);
+                }
+
+                byte[] bytes = finalTexture.EncodeToPNG();
 
 				// Build the final file path
 				string relativeSubFolder = assetName.Substring(iconsPath.Length).TrimStart('/');
@@ -285,11 +291,60 @@ namespace UnityEditorIconScraper {
 			return iconFiles;
 		}
 
-		/// <summary>
-		/// Converts a texture to an uncompressed and readable texture 
-		/// by blitting to a RenderTexture (MUST be done on the main thread).
-		/// </summary>
-		public static Texture2D DeCompress(Texture2D source) {
+        /// <summary>
+        /// Resizes the given texture so that its width does not exceed <paramref name="maxWidth"/>,
+        /// and its height is automatically adjusted to maintain the original aspect ratio.
+        /// </summary>
+        /// <param name="source">The source texture to resize.</param>
+        /// <param name="maxWidth">The maximum allowed width for the resized texture.</param>
+        /// <returns>A new Texture2D with the resized dimensions.</returns>
+        public static Texture2D ResizeToMaxWidth(Texture2D source, int maxWidth) {
+            Texture2D CopyTexture(Texture2D source) {
+                Texture2D copy = new Texture2D(source.width, source.height, source.format, source.mipmapCount > 1);
+                Graphics.CopyTexture(source, copy);
+                return copy;
+            }
+
+            // If the source texture is already within the limit, return a copy or just return source.
+            if (source.width <= maxWidth) {
+                // Optionally, just return the existing texture.
+                // Or return a copy if you prefer not to mutate the original reference.
+                return CopyTexture(source);
+            }
+
+            // Calculate new dimensions
+            float aspectRatio = (float)source.height / source.width;
+            int newWidth = maxWidth;
+            int newHeight = Mathf.RoundToInt(newWidth * aspectRatio);
+
+            // Create a temporary RenderTexture to do the scaling.
+            RenderTexture rt = RenderTexture.GetTemporary(newWidth, newHeight, 0, RenderTextureFormat.Default, RenderTextureReadWrite.Linear);
+            rt.filterMode = FilterMode.Bilinear;
+
+            // Blit the source texture into the RenderTexture, automatically scaling it to the new size.
+            Graphics.Blit(source, rt);
+
+            // Create a new, readable Texture2D to copy the scaled result.
+            Texture2D newTexture = new Texture2D(newWidth, newHeight, TextureFormat.RGBA32, false);
+            RenderTexture previous = RenderTexture.active;
+            RenderTexture.active = rt;
+
+            // Read back the RenderTexture into the new Texture2D.
+            newTexture.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
+            newTexture.Apply();
+
+            // Restore the previous RenderTexture and release the temporary one.
+            RenderTexture.active = previous;
+            RenderTexture.ReleaseTemporary(rt);
+
+            return newTexture;
+        }
+
+        /// <summary>
+        /// Converts a texture to an uncompressed and readable texture 
+        /// by blitting to a RenderTexture (MUST be done on the main thread).
+        /// </summary>
+        public static Texture2D DeCompress(Texture2D source) {
 			RenderTexture renderTex = RenderTexture.GetTemporary(
 				source.width,
 				source.height,
