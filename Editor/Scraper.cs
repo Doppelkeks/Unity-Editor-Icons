@@ -256,6 +256,11 @@ namespace UnityEditorIconScraper {
 				yield return assetName;
 			}
 		}
+
+		/// <summary>
+		/// Create icon data without the actuat byte info
+		/// </summary>
+		/// <returns></returns>
 		private static List<(string, string, string)> CreateIconData() {
 			AssetBundle editorAssetBundle = ReflectionMethods.GetEditorAssetBundle();
 			string iconsPath = GetIconsPath();
@@ -269,18 +274,30 @@ namespace UnityEditorIconScraper {
                 Texture2D icon = editorAssetBundle.LoadAsset<Texture2D>(assetName);
                 if (icon == null)
                     continue;
-                
-				string validAssetName = assetName.Replace("icons/", "");
-                if (validAssetName.EndsWith(".png")) {
-                    validAssetName = validAssetName.Substring(0, validAssetName.Length - 4);
-                }
 
+                string validAssetName = GetValidAssetName(assetName);
                 string fileid = ReflectionMethods.GetFileIDHint(icon);
+
 				iconFiles.Add(new(fileid, icon.name, validAssetName));
             }
 
 			return iconFiles;
 		}
+
+		/// <summary>
+		/// Create a valid asset name
+		/// </summary>
+		/// <param name="assetName"></param>
+		/// <returns></returns>
+		private static string GetValidAssetName(string assetName) {
+            string validAssetName = assetName.Replace("icons/", "");
+            if (validAssetName.EndsWith(ICON_FILE_ENDING)) {
+                validAssetName = validAssetName.Substring(0, validAssetName.Length - ICON_FILE_ENDING.Length);
+            } else if (validAssetName.EndsWith(ASSET_FILE_ENDING)) {
+                validAssetName = validAssetName.Substring(0, validAssetName.Length - ASSET_FILE_ENDING.Length);
+            }
+			return validAssetName;
+        }
 
         /// <summary>
         /// Create all the relevant icon data
@@ -304,11 +321,7 @@ namespace UnityEditorIconScraper {
 				if (icon == null)
 					continue;
 
-                string validAssetName = assetName.Replace("icons/", "");
-                if (validAssetName.EndsWith(".png")) {
-                    validAssetName = validAssetName.Substring(0, validAssetName.Length - 4);
-                }
-
+				string validAssetName = GetValidAssetName(assetName);
                 string fileid = ReflectionMethods.GetFileIDHint(icon);
 
 				// Make it readable on the main thread
