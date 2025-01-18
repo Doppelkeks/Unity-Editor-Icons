@@ -126,18 +126,26 @@ namespace UnityEditorIconScraper {
 				if (_readmeTemplateText == null) {
 					string readmeTemplatePath = Path.GetFullPath(AssetDatabase.GUIDToAssetPath(Settings.instance.readmeTemplateGUID));
 					_readmeTemplateFileName = Path.GetFileName(readmeTemplatePath);
+#if UNITY_6000_0_OR_NEWER
 					_readmeTemplateText = await File.ReadAllTextAsync(readmeTemplatePath);
-					// Replace {unityVersion} if present
-					_readmeTemplateText = _readmeTemplateText.Replace(README_TEMPLATE_UNITY_VERSION, Application.unityVersion);
+#else
+                    _readmeTemplateText = File.ReadAllText(readmeTemplatePath);
+#endif
+                    // Replace {unityVersion} if present
+                    _readmeTemplateText = _readmeTemplateText.Replace(README_TEMPLATE_UNITY_VERSION, Application.unityVersion);
 				}
 				if (_iconPartialText == null) {
 					string iconPartialTemplatePath = Path.GetFullPath(AssetDatabase.GUIDToAssetPath(Settings.instance.iconPartialTemplateGUID));
-					// Use async file reads
+                    // Use async file reads
+#if UNITY_6000_0_OR_NEWER
 					_iconPartialText = await File.ReadAllTextAsync(iconPartialTemplatePath);
+#else
+                    _iconPartialText = File.ReadAllText(iconPartialTemplatePath);
+#endif
 				}
 
-				// 2) Gather icons for "small" output
-				EditorUtility.DisplayProgressBar(GENERATE_README_MESSAGE, "Gathering small icon data...", 0.25f);
+                // 2) Gather icons for "small" output
+                EditorUtility.DisplayProgressBar(GENERATE_README_MESSAGE, "Gathering small icon data...", 0.25f);
 				List<IconFileData> iconFiles = CreateIconData(Settings.instance.smallIconsOutputPath);
 
 				// 3) Parallel write small icons
@@ -184,7 +192,11 @@ namespace UnityEditorIconScraper {
 
 				// 6) Write the final README asynchronously
 				string fullReadmeOutputPath = Path.Combine(Settings.instance.readmeOutputPath, _readmeTemplateFileName);
+#if UNITY_6000_0_OR_NEWER
 				await File.WriteAllTextAsync(fullReadmeOutputPath, sb.ToString());
+#else
+                File.WriteAllText(fullReadmeOutputPath, sb.ToString());
+#endif
 
 				Debug.Log($"{_readmeTemplateFileName} has been generated at '{readmeOutputDirectory}'.");
 			} catch (Exception ex) {
@@ -278,7 +290,7 @@ namespace UnityEditorIconScraper {
                 string validAssetName = GetValidAssetName(assetName);
                 string fileid = ReflectionMethods.GetFileIDHint(icon);
 
-				iconFiles.Add(new(fileid, icon.name, validAssetName));
+				iconFiles.Add((fileid, icon.name, validAssetName));
             }
 
 			return iconFiles;
@@ -366,9 +378,9 @@ namespace UnityEditorIconScraper {
 		/// <param name="maxWidth">The maximum allowed width for the resized texture.</param>
 		/// <returns>A new Texture2D with the resized dimensions.</returns>
 		public static Texture2D ResizeToMaxWidth(Texture2D source, int maxWidth) {
-			Texture2D CopyTexture(Texture2D source) {
-				Texture2D copy = new Texture2D(source.width, source.height, source.format, source.mipmapCount > 1);
-				Graphics.CopyTexture(source, copy);
+			Texture2D CopyTexture(Texture2D src) {
+				Texture2D copy = new Texture2D(src.width, src.height, src.format, src.mipmapCount > 1);
+				Graphics.CopyTexture(src, copy);
 				return copy;
 			}
 

@@ -6,8 +6,13 @@ namespace UnityEditorIconScraper {
     /// Holds user-configurable settings for the Unity Editor Icon Scraper tool.
     /// Stored in the ProjectSettings/UnityEditorIconScraper.asset file.
     /// </summary>
+#if UNITY_6000_0_OR_NEWER
     [FilePath("ProjectSettings/" + nameof(UnityEditorIconScraper) + ".asset", FilePathAttribute.Location.ProjectFolder)]
     public class Settings : SimpleSettings<Settings> {
+#else
+    [CreateAssetMenu(fileName = nameof(UnityEditorIconScraper) + ".asset", menuName = WINDOW_PATH, order = 1)]
+    public class Settings : ScriptableObject {
+#endif
         /// <summary>
         /// The display path in the Project Settings window.
         /// </summary>
@@ -82,6 +87,7 @@ namespace UnityEditorIconScraper {
         [Header("Code Generator"), Tooltip("Name of the constants class")]
         public string constantsClassName = "EditorIcons";
 
+#if UNITY_6000_0_OR_NEWER
         /// <summary>
         /// Registers this settings object in the Project Settings window under 'Tools/UnityEditorIconScraper'.
         /// </summary>
@@ -90,5 +96,16 @@ namespace UnityEditorIconScraper {
         private static SettingsProvider RegisterInProjectSettings() {
             return new SimpleSettingsProvider<Settings>(WINDOW_PATH);
         }
+#else
+        private static Settings _instance = null;
+        public static Settings instance {
+            get {
+                if (_instance == null) {
+                    _instance = ScriptableObject.CreateInstance<Settings>();
+                }
+                return _instance;
+            }
+        }
+#endif
     }
 }

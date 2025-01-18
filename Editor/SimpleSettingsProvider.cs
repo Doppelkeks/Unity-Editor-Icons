@@ -1,9 +1,12 @@
-﻿using UnityEditor;
+﻿#if UNITY_6000_0_OR_NEWER
+
+using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace UnityEditorIconScraper {
+
     public class SimpleSettingsProvider<T> : SettingsProvider where T : SimpleSettings<T> {
 		
 		private SerializedObject serializedData;
@@ -52,3 +55,4 @@ namespace UnityEditorIconScraper {
 		}
 	}
 }
+#endif

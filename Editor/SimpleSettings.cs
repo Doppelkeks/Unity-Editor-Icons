@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿#if UNITY_6000_0_OR_NEWER
+using UnityEditor;
 using UnityEngine;
 
 namespace UnityEditorIconScraper {
@@ -12,3 +13,4 @@ namespace UnityEditorIconScraper {
 		}
 	}
 }
+#endif
