@@ -10,3 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
+## [0.0.2] - 2025-01-18
+### Added
+- Added constants generator
+### Changed
+- Changed name generation in readme method
+
+

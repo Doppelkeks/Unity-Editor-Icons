@@ -1,0 +1,6 @@
+﻿namespace //%namespaceRuntime {
+    public class //%classNameKeys {
+        //%1/// <summary>%constComment</summary>
+        //%0public const %constType %constValue = %constKey;
+    }
+}

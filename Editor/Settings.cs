@@ -12,7 +12,7 @@ namespace UnityEditorIconScraper {
         /// The display path in the Project Settings window.
         /// </summary>
         public const string WINDOW_PATH = "Tools/" + nameof(UnityEditorIconScraper);
-         
+
         /// <summary>
         /// Maximum pixel width of small icons for the readme generation.
         /// </summary>
@@ -24,7 +24,7 @@ namespace UnityEditorIconScraper {
         /// </summary>
         [Header("Paths"), Tooltip("Path where original icons will be stored (relative to the project root).")]
         public string originalIconsOutputPath = "Icons~/Original";
-
+ 
         /// <summary>
         /// The folder path where smaller icons (for README or other purposes) will be written.
         /// </summary>
@@ -36,6 +36,12 @@ namespace UnityEditorIconScraper {
         /// </summary>
         [Tooltip("Path (folder or full file name) where the README.md will be placed.")]
         public string readmeOutputPath = "Icons~/";
+
+        /// <summary>
+        /// The folder path where the generated constants should be placed.
+        /// </summary>
+        [Tooltip("The folder path where the generated constants should be placed.")]
+        public string constantsCodeGenPath = "Assets/Scripts";
 
         /// <summary>
         /// Arguments passed to pngquant.exe for processing/compressing PNG files.
@@ -62,6 +68,19 @@ namespace UnityEditorIconScraper {
         /// </summary>
         [Tooltip("GUID of the partial template file for inserting icon lines in the README.")]
         public string iconPartialTemplateGUID = "3cc672dcb0cd71f43a276c3b10b8fab6";
+
+        /// <summary>
+        /// GUID referencing the constant csharp template
+        /// </summary>
+        [Tooltip("GUID of the partial template file for inserting icon lines in the README.")]
+        public string constantRuntimeTemplateGUID = "7c9c59198cf6db141823d2a2454cde60";
+
+
+        /// <summary>
+        /// Name of the constants class
+        /// </summary>
+        [Header("Code Generator"), Tooltip("Name of the constants class")]
+        public string constantsClassName = "EditorIcons";
 
         /// <summary>
         /// Registers this settings object in the Project Settings window under 'Tools/UnityEditorIconScraper'.
