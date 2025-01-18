@@ -101,7 +101,7 @@ namespace UnityEditorIconScraper {
         public static Settings instance {
             get {
                 if (_instance == null) {
-                    _instance = ScriptableObject.CreateInstance<Settings>();
+                    _instance = Resources.Load<Settings>(nameof(UnityEditorIconScraper));
                 }
                 return _instance;
             }
